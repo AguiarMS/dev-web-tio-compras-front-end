@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet"  href="css/style.css">
+    <title>Crud Produto</title>
+</head>
+<body onload="createVueApp(); vApp.getCompras();">
+
+    <div id="app" class="container">
+
+        <h1 class="text-center">Lista de Compras</h1>
+        <div class="row mb-3 d-flex justify-content-center">    
+          <div class="col-5">
+            <div class="input-group">
+              <div class="input-group-prepend">
+                <div class="input-group-text bg-light " id="fundo">
+                <select class="bg-light text-secondary border-0" id="tipo-busca">
+                  <option value="id"  selected>ID</option>
+                  <option value="lista-limpeza"  selected>Produtos Limpeza</option>
+                  <option value="lista-alimenticia">Produtos Alimentos</option>
+                  <option value="lista-tecnologia">Produtos Tecnologia</option>
+                </select>
+              </div>
+              </div>
+
+
+              <input type="text" class="form-control" id="campo-busca" placeholder="Selecione a Categoria" aria-label="Busca" aria-describedby="basic-addon1">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" onclick=" vApp.getSelectCompras();" type="button">Buscar</button>
+              </div>
+            </div>
+        </div>
+
+        
+        </div>
+        <table class="table">
+            <thead id='tabela'>
+              <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Produto</th>
+                <th scope="col">Unidade de Medida</th>
+                <th scope="col">Quantidade</th>
+                <th scope="col">Categoria</th>               
+              </tr>  
+            </thead>
+
+            <tbody >
+              <tr id="tabela" v-for = "(compra, index) in compras">
+                <th scope="row">{{compra.id}}</th>
+                <td>{{compra.produto}}</td>
+                <td>{{compra.unidadeMedida}}</td>
+                <td>{{compra.quantidade}}</td>
+                <td>{{compra.categoria}}</td>
+                <td>
+                    <button type="button" class="btn btn-warning mr-3" v-bind:data-object-index="index" onclick="enablePut(this)" data-toggle="modal" data-target="#postModal"><i class="fas fa-edit"></i></button>
+                    <button type="button" class="btn btn-danger" v-bind:data-object-index="index" onclick="vApp.deleteCompra(this)"><i class="fas fa-trash"></i></button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="row justify-content-center">
+
+            <button type="button" class="btn btn-light mr-5 btn-lg" onclick="vApp.getCompras();">Todos Produtos</button>
+            <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#postModal">Cadastrar Produto</button>
+          </div>
+
+ 
+
+
+          <div class="modal fade" id="postModal" tabindex="-1" role="dialog" aria-labelledby="codigoModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="mudarProduto">Cadastrar Compra</h5>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+
+                    <input type="hidden" id="selectID">
+
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text mb-3" id="labelProduto">Produto</span>
+                        </div>
+                        <input type="text" class="form-control" placeholder="Insira o Produto" aria-label="000-000" aria-describedby="labelProduto" id="inputProduto">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text mb-3" id="labelMedida">Unidade Medida</span>
+                          </div>
+                          <input type="text" class="form-control" placeholder="Selecione a Unidade de Medida" aria-label="000-000" aria-describedby="labelMedida" id="inputMedida">
+                    </div>
+
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text mb-3" id="labelQuantidade">Quantidade</span>
+                          </div>
+                          <input type="text" class="form-control" placeholder="Insira a Quantidade" aria-label="000-000" aria-describedby="labelQuantidade" id="inputQuantidade">
+                    </div>
+
+
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text mb-3" id="labelCategoria">Categoria</span>
+                          </div>
+                          <input type="text" class="form-control" placeholder="Insira a Categoria" aria-label="000-000" aria-describedby="labelCategoria" id="inputCategoria">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+                  <button type="button" class="btn btn-primary" onclick="vApp.postCompra();" id="btnCadastrar">Cadastrar</button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+          
+    </div>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://kit.fontawesome.com/9e4795bd97.js" crossorigin="anonymous"></script>
+    <script src="js/main.js"></script>
+</body>
+</html>

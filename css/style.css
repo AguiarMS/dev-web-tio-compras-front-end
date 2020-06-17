@@ -1,0 +1,10 @@
+
+select:hover{
+    cursor: pointer;
+}
+ #fundo:hover{
+    border-color: #dae0e5 !important;
+ }
+.data {
+width: 3vh;
+}
